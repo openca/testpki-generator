@@ -15,7 +15,7 @@ for the Root, Intermediate, and End Entity certificates. When the script is
 executed, each of the parameters' files is executed and the configured PKI is
 issued: private keys, certificates, and convenient chain files.
 
-Example:
+To generate all configured PKIs, simply use the makefile default target:
 
 ```bash
 $ make
@@ -26,6 +26,9 @@ Loading params/trad-1-params.sh ...
 Loading params/trad-2-params.sh ...
 $
 ```
+
+The defaul example PKIs' artifacts are provided as an example in the examples/
+directory of the repository.
 
 ## Support
 
