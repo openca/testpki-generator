@@ -69,31 +69,31 @@ for i in params/*.sh ; do
 
   # Generates the certificates
   res=$(cd PKIs/$OUT_DIR \
-        && openssl x509 -req -key private/root.private -keyform DER -outform DER -in requests/root.request -out certs/root.cert -not_before 20010101000000Z -not_after 99991231235959Z -extfile ../../profiles/root.profile 2>/dev/null > /dev/null \
-        && openssl x509 -req -CAkey private/root.private -keyform DER -CA certs/root.cert -outform DER -in requests/ica.request -out certs/ica.cert -not_before 20010101000000Z -not_after 99991231235959Z -extfile ../../profiles/ica.profile 2>/dev/null > /dev/null \
-        && openssl x509 -req -CAkey private/ica.private -keyform DER -CA certs/ica.cert -outform DER -in requests/server.request -out certs/server.cert -not_before 20010101000000Z -not_after 99991231235959Z -extfile ../../profiles/server.profile 2>/dev/null > /dev/null \
-        && openssl x509 -req -CAkey private/ica.private -keyform DER -CA certs/ica.cert -outform DER -in requests/client.request -out certs/client.cert -not_before 20010101000000Z -not_after 99991231235959Z -extfile ../../profiles/client.profile 2>/dev/null > /dev/null \
-        && openssl x509 -req -CAkey private/ica.private -keyform DER -CA certs/ica.cert -outform DER -in requests/ocsp.request -out certs/ocsp.cert -not_before 20010101000000Z -not_after 99991231235959Z -extfile ../../profiles/ocsp.profile 2>/dev/null > /dev/null \
-        && openssl x509 -req -CAkey private/ica.private -keyform DER -CA certs/ica.cert -outform DER -in requests/cvc.request -out certs/cvc.cert -not_before 20010101000000Z -not_after 99991231235959Z -extfile ../../profiles/cvc.profile 2>/dev/null > /dev/null )
+        && openssl x509 -req -key private/root.private -keyform DER -outform DER -in requests/root.request -out certs/root.cer -not_before 20010101000000Z -not_after 99991231235959Z -extfile ../../profiles/root.profile 2>/dev/null > /dev/null \
+        && openssl x509 -req -CAkey private/root.private -keyform DER -CA certs/root.cer -outform DER -in requests/ica.request -out certs/ica.cer -not_before 20010101000000Z -not_after 99991231235959Z -extfile ../../profiles/ica.profile 2>/dev/null > /dev/null \
+        && openssl x509 -req -CAkey private/ica.private -keyform DER -CA certs/ica.cer -outform DER -in requests/server.request -out certs/server.cer -not_before 20010101000000Z -not_after 99991231235959Z -extfile ../../profiles/server.profile 2>/dev/null > /dev/null \
+        && openssl x509 -req -CAkey private/ica.private -keyform DER -CA certs/ica.cer -outform DER -in requests/client.request -out certs/client.cer -not_before 20010101000000Z -not_after 99991231235959Z -extfile ../../profiles/client.profile 2>/dev/null > /dev/null \
+        && openssl x509 -req -CAkey private/ica.private -keyform DER -CA certs/ica.cer -outform DER -in requests/ocsp.request -out certs/ocsp.cer -not_before 20010101000000Z -not_after 99991231235959Z -extfile ../../profiles/ocsp.profile 2>/dev/null > /dev/null \
+        && openssl x509 -req -CAkey private/ica.private -keyform DER -CA certs/ica.cer -outform DER -in requests/cvc.request -out certs/cvc.cer -not_before 20010101000000Z -not_after 99991231235959Z -extfile ../../profiles/cvc.profile 2>/dev/null > /dev/null )
 
   # TODO: Sign CRLs
 
   # Signs the OCSP responses for the generated certificates
-  # serial=$(openssl x509 -serial -in certs/root.cert -inform DER -noout | cut -d= -f2)
+  # serial=$(openssl x509 -serial -in certs/root.cer -inform DER -noout | cut -d= -f2)
   res=$(cd PKIs/$OUT_DIR \
         && echo -n > index.txt \
-        && openssl ocsp -rsigner certs/root.cert -rkey private/root.private -respout ocsp/ica.ocsp -index index.txt -CA certs/root.cert -issuer certs/root.cert -cert certs/ica.cert -ndays 365000 \
-        && openssl ocsp -rsigner certs/ica.cert -rkey private/ica.private -respout ocsp/server.ocsp -index index.txt -CA certs/root.cert -issuer certs/ica.cert -cert certs/server.cert -ndays 365000 \
-        && openssl ocsp -rsigner certs/ica.cert -rkey private/ica.private -respout ocsp/client.ocsp -index index.txt -CA certs/root.cert -issuer certs/ica.cert -cert certs/client.cert -ndays 365000 \
-        && openssl ocsp -rsigner certs/ica.cert -rkey private/ica.private -respout ocsp/ocsp.ocsp -index index.txt -CA certs/root.cert -issuer certs/ica.cert -cert certs/ocsp.cert -ndays 365000 \
-        && openssl ocsp -rsigner certs/ica.cert -rkey private/ica.private -respout ocsp/cvc.ocsp -index index.txt -CA certs/root.cert -issuer certs/ica.cert -cert certs/cvc.cert -ndays 365000 )
+        && openssl ocsp -rsigner certs/root.cer -rkey private/root.private -respout ocsp/ica.ocsp -index index.txt -CA certs/root.cer -issuer certs/root.cer -cert certs/ica.cer -ndays 365000 \
+        && openssl ocsp -rsigner certs/ica.cer -rkey private/ica.private -respout ocsp/server.ocsp -index index.txt -CA certs/root.cer -issuer certs/ica.cer -cert certs/server.cer -ndays 365000 \
+        && openssl ocsp -rsigner certs/ica.cer -rkey private/ica.private -respout ocsp/client.ocsp -index index.txt -CA certs/root.cer -issuer certs/ica.cer -cert certs/client.cer -ndays 365000 \
+        && openssl ocsp -rsigner certs/ica.cer -rkey private/ica.private -respout ocsp/ocsp.ocsp -index index.txt -CA certs/root.cer -issuer certs/ica.cer -cert certs/ocsp.cer -ndays 365000 \
+        && openssl ocsp -rsigner certs/ica.cer -rkey private/ica.private -respout ocsp/cvc.ocsp -index index.txt -CA certs/root.cer -issuer certs/ica.cer -cert certs/cvc.cer -ndays 365000 )
 
   # Builds the chain files
   res=$(cd PKIs/$OUT_DIR \
-        && cat certs/server.cert certs/ica.cert > chains/server.chain \
-        && cat certs/client.cert certs/ica.cert > chains/client.chain \
-        && cat certs/ocsp.cert certs/ica.cert > chains/ocsp.chain \
-        && cat certs/cvc.cert certs/ica.cert > chains/cvc.chain )
+        && cat certs/server.cer certs/ica.cer > chains/server.chain \
+        && cat certs/client.cer certs/ica.cer > chains/client.chain \
+        && cat certs/ocsp.cer certs/ica.cer > chains/ocsp.chain \
+        && cat certs/cvc.cer certs/ica.cer > chains/cvc.chain )
 
 done
 
