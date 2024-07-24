@@ -95,6 +95,16 @@ for i in params/*.sh ; do
         && cat certs/ocsp.cer certs/ica.cer > chains/ocsp.chain \
         && cat certs/cvc.cer certs/ica.cer > chains/cvc.chain )
 
+  # Provides the PKI description
+  res=$(cd PKIs/$OUT_DIR \
+        && echo "PKI $OUT_DIR:" > description.txt \
+        && echo "  Root CA ($ROOT_ALG): certs/root.cer" >> description.txt \
+        && echo "  Intermediate CA ($ICA_ALG): certs/ica.cer" >> description.txt \
+        && echo "  Server Certificate ($EE_ALG): certs/server.cer" >> description.txt \
+        && echo "  Client Certificate ($EE_ALG): certs/client.cer" >> description.txt \
+        && echo "  OCSP Responder Certificate ($EE_ALG): certs/ocsp.cer" >> description.txt \
+        && echo "  CVC Certificate ($EE_ALG): certs/cvc.cer" )
+
 done
 
 exit 0

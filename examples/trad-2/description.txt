@@ -1,0 +1,6 @@
+PKI trad-2:
+  Root CA (ec): certs/root.cer
+  Intermediate CA (ec): certs/ica.cer
+  Server Certificate (ec): certs/server.cer
+  Client Certificate (ec): certs/client.cer
+  OCSP Responder Certificate (ec): certs/ocsp.cer

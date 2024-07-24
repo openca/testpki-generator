@@ -1,0 +1,6 @@
+PKI comp-2:
+  Root CA (mldsa65_p256): certs/root.cer
+  Intermediate CA (mldsa65_p256): certs/ica.cer
+  Server Certificate (mldsa44_p256): certs/server.cer
+  Client Certificate (mldsa44_p256): certs/client.cer
+  OCSP Responder Certificate (mldsa44_p256): certs/ocsp.cer

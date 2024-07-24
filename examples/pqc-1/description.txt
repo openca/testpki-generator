@@ -1,0 +1,6 @@
+PKI pqc-1:
+  Root CA (mldsa87): certs/root.cer
+  Intermediate CA (mldsa65): certs/ica.cer
+  Server Certificate (mldsa44): certs/server.cer
+  Client Certificate (mldsa44): certs/client.cer
+  OCSP Responder Certificate (mldsa44): certs/ocsp.cer
