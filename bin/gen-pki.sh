@@ -90,10 +90,14 @@ for i in params/*.sh ; do
 
   # Builds the chain files
   res=$(cd PKIs/$OUT_DIR \
-        && cat certs/server.cer certs/ica.cer > chains/server.chain \
-        && cat certs/client.cer certs/ica.cer > chains/client.chain \
-        && cat certs/ocsp.cer certs/ica.cer > chains/ocsp.chain \
-        && cat certs/cvc.cer certs/ica.cer > chains/cvc.chain )
+        && openssl x509 -inform DER -in certs/server.cer > chains/server.chain \
+        && openssl x509 -inform DER -in certs/ica.cer >> chains/server.chain \
+        && openssl x509 -inform DER -in certs/client.cer > chains/client.chain \
+        && openssl x509 -inform DER -in certs/ica.cer >> chains/client.chain \
+        && openssl x509 -inform DER -in certs/ocsp.cer > chains/ocsp.chain \
+        && openssl x509 -inform DER -in certs/ica.cer >> chains/ocsp.chain \
+        && openssl x509 -inform DER -in certs/cvc.cer > chains/cvc.chain \
+        && openssl x509 -inform DER -in certs/ica.cer >> chains/cvc.chain )
 
   # Provides the PKI description
   res=$(cd PKIs/$OUT_DIR \

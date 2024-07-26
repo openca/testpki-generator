@@ -4,7 +4,7 @@ This package is provided as a tool to quickly generate full PKI infrastructure
 that can be use for TLS testing. The issued certificates use minimal profiles
 to ensure (a) no-expiration, and (b) compatibility.
 
-## Usage
+## PKI Gen Script Usage
 
 This package uses a makefile to execute the gen-pki.sh script. The script loads
 the parameters' files (one at a time) and generates the PKI according to the
@@ -29,6 +29,31 @@ $
 
 The defaul example PKIs' artifacts are provided as an example in the examples/
 directory of the repository.
+
+## TLS Example Server
+
+### Build
+
+This pacakge builds a client/server implementation to demonstrate the use of
+hybrid technologies for Enterprise TLS (i.e., non-browser traffic). To build
+the software, please use the following
+
+```bash
+$ make build
+```
+
+Please make sure you fix/update the directories in the makefile to correctly
+find the headers and the libraries to be linked.
+
+### Usage
+
+To start the server, you can use any of the examples/ or the PKIs/ directories
+credentials by simply providing the directory where to load the chain and
+private key from:
+
+```bash
+$ src/mermaid-server examples/comp-1
+```
 
 ## Support
 

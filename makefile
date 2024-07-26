@@ -5,10 +5,14 @@
 .PHONY: all
 
 all:
-	@./gen-pki.sh
+	@./bin/gen-pki.sh
+
+build:
+	@cd src && make
 
 clean:
-	@rm -rf PKIs
+	@rm -rf	PKIs
+	@cd src && make clean
 
 distclean: clean
 

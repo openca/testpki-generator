@@ -1,18 +1,18 @@
 
-TESTS = server_core client_core
+TESTS = mermaid_server mermaid_client
 
-CFLAGS  = -I../../include -g -Wall
-LDFLAGS = -L../..
+CFLAGS  = -Iinclude/ -I/opt/pqc/include -g -Wall
+LDFLAGS = -L. -L.. -L/opt/pqc
 LDLIBS  = -lssl -lcrypto
 
 all: $(TESTS)
 
-server: server_core.o
+mermaid_server: mermaid_server.o
 
-client: client_core.o
+mermaid_client: mermaid_client.o
 
 $(TESTS):
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< $(LDLIBS)
+	@$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< $(LDLIBS)
 
 clean:
-	$(RM) $(TESTS) *.o
+	@$(RM) $(TESTS) *.o
