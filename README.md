@@ -61,4 +61,3 @@ Please direct all your inquiries at Dr. Pala `<director@openca.org>`
 
 Enjoy PKIs!
 Dr. Pala
-

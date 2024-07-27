@@ -32,7 +32,7 @@ typedef unsigned char   bool;
  */
 static volatile bool    server_running = true;
 
-static int create_socket(bool isServer)
+static int create_socket(void)
 {
     int s;
     int optval = 1;
@@ -44,7 +44,6 @@ static int create_socket(bool isServer)
         exit(EXIT_FAILURE);
     }
 
-    if (isServer) {
         addr.sin_family = AF_INET;
         addr.sin_port = htons(server_port);
         addr.sin_addr.s_addr = INADDR_ANY;
@@ -65,20 +64,16 @@ static int create_socket(bool isServer)
             perror("Unable to listen");
             exit(EXIT_FAILURE);
         }
-    }
 
     return s;
 }
 
-static SSL_CTX* create_context(bool isServer)
+static SSL_CTX* create_context()
 {
     const SSL_METHOD *method;
     SSL_CTX *ctx;
 
-    if (isServer)
-        method = TLS_server_method();
-    else
-        method = TLS_client_method();
+    method = TLS_server_method();
 
     ctx = SSL_CTX_new(method);
     if (ctx == NULL) {
@@ -165,8 +160,16 @@ int main(int argc, char **argv)
             exit(EXIT_FAILURE);
         }
 
+    char trust_filename[512] = { 0x0 };
+    sprintf(trust_filename, "%s/certs/trust.store", config_dir);
+
+    if (!SSL_CTX_load_verify_file(ssl_ctx, trust_filename)) {
+        ERR_print_errors_fp(stderr);
+        exit(EXIT_FAILURE);
+    }
+
         /* Create server socket; will bind with server port and listen */
-        server_skt = create_socket(true);
+        server_skt = create_socket();
 
         /*
          * Loop to accept clients.

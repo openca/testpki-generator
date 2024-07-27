@@ -12,7 +12,7 @@ mermaid_server: mermaid_server.o
 mermaid_client: mermaid_client.o
 
 $(TESTS):
-	@$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< $(LDLIBS)
+	@$(CC) $(CFLAGS) $(LDFLAGS) -o ../bin/$@ $< $(LDLIBS)
 
 clean:
 	@$(RM) $(TESTS) *.o
