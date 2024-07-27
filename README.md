@@ -55,6 +55,16 @@ private key from:
 $ src/mermaid-server examples/comp-1
 ```
 
+The client implementation is also available. The first argument is the same
+as the server's use case, however the client also requires the `server_name`
+and the `server_port` parameters.
+
+For example, to connect to locahost at port 4433, you can run:
+
+```bash
+$ src/mermaid-client examples/comp-1 localhost 4433
+```
+
 ## Support
 
 Please direct all your inquiries at Dr. Pala `<director@openca.org>`
