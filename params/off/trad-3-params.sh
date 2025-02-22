@@ -1,8 +1,8 @@
 #!/bin/bash
 
-OUT_DIR="q-pki"
+OUT_DIR="trad-3-eddsa"
 
-ROOT_ALG="ed25519"
+ROOT_ALG="ed448"
 ROOT_PARAMS=""
 
 ICA_ALG="ed25519"
