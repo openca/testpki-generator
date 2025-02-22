@@ -1,6 +1,23 @@
 #!/bin/bash
 
+# OpenSSL Command Line Tool
 OSSL_CMD=$(type -path openssl)
+
+# Validity Options
+OSSL_30_VALIDITY_OPT="-days 20000"
+OSSL_33_VALIDITY_OPT="-not_before 20010101000000Z -not_after 99991231235959Z"
+OSSL_VALIDITY_OPT=$OSSL_33_VALIDITY_OPT
+
+# Selects the right options for the installed OSSL version
+ret=$($OSSL_CMD version | grep "3.0" )
+if [ $? == 0 ] ; then
+	OSSL_VALIDITY_OPT=$OSSL_30_VALIDITY_OPT
+fi
+
+# Sets the default format
+if [ "x$FORMAT" = "" ] ; then
+	FORMAT="PEM"
+fi
 
 case "$1" in 
   -h|--help)
@@ -19,18 +36,6 @@ case "$1" in
   -q|--quiet)
     exec 1>/dev/null
     shift
-    ;;
-  -p|--pqc)
-    shift
-    . ./params/pqc-params.sh
-    ;;
-  -t|--trad)
-    shift
-    . ./params/trad-params.sh
-    ;;
-  -c|--comp)
-    shift
-    . ./params/comp-params.sh
     ;;
 esac
 
@@ -69,12 +74,12 @@ for i in params/*.sh ; do
 
   # Generates the certificates
   res=$(cd PKIs/$OUT_DIR \
-        && openssl x509 -req -key private/root.private -keyform DER -outform DER -in requests/root.request -out certs/root.cer -not_before 20010101000000Z -not_after 99991231235959Z -extfile ../../profiles/root.profile 2>/dev/null > /dev/null \
-        && openssl x509 -req -CAkey private/root.private -keyform DER -CA certs/root.cer -outform DER -in requests/ica.request -out certs/ica.cer -not_before 20010101000000Z -not_after 99991231235959Z -extfile ../../profiles/ica.profile 2>/dev/null > /dev/null \
-        && openssl x509 -req -CAkey private/ica.private -keyform DER -CA certs/ica.cer -outform DER -in requests/server.request -out certs/server.cer -not_before 20010101000000Z -not_after 99991231235959Z -extfile ../../profiles/server.profile 2>/dev/null > /dev/null \
-        && openssl x509 -req -CAkey private/ica.private -keyform DER -CA certs/ica.cer -outform DER -in requests/client.request -out certs/client.cer -not_before 20010101000000Z -not_after 99991231235959Z -extfile ../../profiles/client.profile 2>/dev/null > /dev/null \
-        && openssl x509 -req -CAkey private/ica.private -keyform DER -CA certs/ica.cer -outform DER -in requests/ocsp.request -out certs/ocsp.cer -not_before 20010101000000Z -not_after 99991231235959Z -extfile ../../profiles/ocsp.profile 2>/dev/null > /dev/null \
-        && openssl x509 -req -CAkey private/ica.private -keyform DER -CA certs/ica.cer -outform DER -in requests/cvc.request -out certs/cvc.cer -not_before 20010101000000Z -not_after 99991231235959Z -extfile ../../profiles/cvc.profile 2>/dev/null > /dev/null )
+        && openssl x509 -req -key private/root.private -inform DER -outform DER -in requests/root.request -out certs/root.cer -extfile ../../profiles/root.profile $OSSL_VALIDITY_OPT 2>/dev/null > /dev/null \
+        && openssl x509 -req -CAkey private/root.private -CAkeyform DER -CA certs/root.cer -CAform DER -inform DER -outform DER -in requests/ica.request -out certs/ica.cer -extfile ../../profiles/ica.profile $OSSL_VALIDITY_OPT 2>/dev/null > /dev/null \
+        && openssl x509 -req -CAkey private/ica.private -CAkeyform DER -CA certs/ica.cer -CAform DER -in requests/server.request -inform DER -out certs/server.cer -outform DER -extfile ../../profiles/server.profile $OSSL_VALIDITY_OPT 2>/dev/null > /dev/null \
+        && openssl x509 -req -CAkey private/ica.private -CAkeyform DER -CA certs/ica.cer -CAform DER -inform DER -outform DER -in requests/client.request -out certs/client.cer -extfile ../../profiles/client.profile $OSSL_VALIDITY_OPT 2>/dev/null > /dev/null \
+        && openssl x509 -req -CAkey private/ica.private -CAkeyform DER -CA certs/ica.cer -CAform DER -inform DER -outform DER -in requests/ocsp.request -out certs/ocsp.cer -extfile ../../profiles/ocsp.profile $OSSL_VALIDITY_OPT 2>/dev/null > /dev/null \
+        && openssl x509 -req -CAkey private/ica.private -CAkeyform DER -CA certs/ica.cer -CAform DER -inform DER -outform DER -in requests/cvc.request -out certs/cvc.cer -extfile ../../profiles/cvc.profile $OSSL_VALIDITY_OPT 2>/dev/null > /dev/null )
 
   # TODO: Sign CRLs
 

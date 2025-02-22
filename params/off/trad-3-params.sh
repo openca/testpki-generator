@@ -1,0 +1,13 @@
+#!/bin/bash
+
+OUT_DIR="q-pki"
+
+ROOT_ALG="ed25519"
+ROOT_PARAMS=""
+
+ICA_ALG="ed25519"
+ICA_PARAMS=""
+
+EE_ALG="ed25519"
+EE_PARAMS=""
+
